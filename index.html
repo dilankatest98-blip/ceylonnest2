@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">CeylonNest | Premium Sri Lankan Dry Foods & Spices</title>
+    <link rel="icon" type="image/png" id="site-favicon" href="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: {
+                        brand: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 900: '#14532d' },
+                        warm: { 50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 800: '#292524', 900: '#1c1917', 950: '#0c0a09' },
+                        gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .cart-drawer { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        .cart-drawer.open { transform: translateX(0); }
+        .mobile-menu { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
+        .mobile-menu.open { transform: translateX(0); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-content.active { max-height: 500px; }
+        .lazy-img { opacity: 0; transition: opacity 0.3s; }
+        .lazy-img.loaded { opacity: 1; }
+        .back-to-top { opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .checkout-modal { display: none; position: fixed; inset: 0; z-index: 60; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .checkout-modal.active { display: flex; align-items: center; justify-content: center; }
+        .checkout-content { background: white; border-radius: 1.5rem; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .weight-option { border: 2px solid #e7e5e4; transition: all 0.2s; }
+        .weight-option.selected { border-color: #16a34a; background: #f0fdf4; color: #16a34a; }
+        .shipping-option { border: 2px solid #e7e5e4; transition: all 0.2s; }
+        .shipping-option.selected { border-color: #16a34a; background: #f0fdf4; }
+        .payment-method { border: 2px solid #e7e5e4; transition: all 0.2s; }
+        .payment-method.selected { border-color: #16a34a; background: #f0fdf4; }
+        .copy-btn { transition: all 0.2s; }
+        .copy-btn:hover { background-color: #dcfce7; color: #16a34a; }
+        .copy-btn.copied { background-color: #16a34a; color: white; }
+        .bank-card { transition: all 0.3s ease; }
+        .bank-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .logo-img { height: 40px; width: auto; object-fit: contain; border-radius: 8px; }
+        .hero-logo { height: 80px; width: auto; object-fit: contain; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .admin-panel { display: none; }
+        .admin-panel.active { display: block; }
+        .admin-sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: #1c1917; z-index: 100; overflow-y: auto; }
+        .admin-main { margin-left: 260px; min-height: 100vh; background: #f5f5f4; }
+        .admin-nav-item { transition: all 0.2s; }
+        .admin-nav-item:hover, .admin-nav-item.active { background: rgba(255,255,255,0.1); border-left: 3px solid #22c55e; }
+        .admin-card { background: white; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e7e5e4; border-radius: 0.5rem; transition: all 0.2s; }
+        .form-input:focus { outline: none; border-color: #22c55e; }
+        .btn-primary { background: #16a34a; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; }
+        .btn-primary:hover { background: #15803d; }
+        .btn-secondary { background: #f5f5f4; color: #292524; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; }
+        .btn-secondary:hover { background: #e7e5e4; }
+        .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .login-modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+        .login-modal.active { display: flex; }
+        .admin-toggle-btn { position: fixed; bottom: 100px; right: 6px; z-index: 40; background: #1c1917; color: white; padding: 12px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s; }
+        .admin-toggle-btn:hover { background: #16a34a; transform: scale(1.1); }
+        @media (max-width: 1024px) { .admin-sidebar { transform: translateX(-100%); transition: transform 0.3s; } .admin-sidebar.open { transform: translateX(0); } .admin-main { margin-left: 0; } }
+    </style>
+</head>
+<body class="bg-warm-50 text-warm-900 font-sans antialiased">
+    
+    <!-- MAIN WEBSITE -->
+    <div id="main-website">
+        <div id="top-bar" class="bg-brand-900 text-white text-center py-2 px-4 text-sm font-medium">🌍 We Ship Worldwide | ✈️ DHL & FedEx Express | 💳 Secure International Payments</div>
+        
+        <header id="header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16 lg:h-20">
+                    <a href="#home" class="flex items-center space-x-3 group">
+                        <img id="header-logo" src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg" alt="CeylonNest" class="logo-img">
+                        <span id="header-brand-name" class="font-serif text-2xl font-bold text-warm-900">CeylonNest</span>
+                    </a>
+                    <nav class="hidden lg:flex items-center space-x-8">
+                        <a href="#home" class="text-warm-800 hover:text-brand-600 font-medium">Home</a>
+                        <a href="#spices" class="text-warm-800 hover:text-brand-600 font-medium">Spices & Herbs</a>
+                        <a href="#dry-vegetables" class="text-warm-800 hover:text-brand-600 font-medium">Dry Vegetables</a>
+                        <a href="#fruits-nuts" class="text-warm-800 hover:text-brand-600 font-medium">Fruits & Nuts</a>
+                        <a href="#bulk" class="text-warm-800 hover:text-brand-600 font-medium">Bulk Export</a>
+                        <a href="#payment" class="text-warm-800 hover:text-brand-600 font-medium">Payment</a>
+                        <a href="#contact" class="text-warm-800 hover:text-brand-600 font-medium">Contact</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <select id="currency-selector" onchange="changeCurrency()" class="hidden sm:block bg-warm-100 border-none rounded-lg px-3 py-1 text-sm font-medium">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="AUD">AUD ($)</option>
+                            <option value="CAD">CAD ($)</option>
+                        </select>
+                        <button onclick="toggleCart()" class="relative p-2 text-warm-800 hover:text-brand-600 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                        </button>
+                        <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-warm-800">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div id="mobile-menu" class="mobile-menu fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-2xl lg:hidden">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center space-x-3">
+                        <img id="mobile-logo" src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg" alt="CeylonNest" class="h-10 w-10 object-cover rounded-lg">
+                        <span id="mobile-brand-name" class="font-serif text-2xl font-bold">CeylonNest</span>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#spices" onclick="toggleMobileMenu()" class="block text-lg font-medium py-2 border-b">Spices & Herbs</a>
+                    <a href="#dry-vegetables" onclick="toggleMobileMenu()" class="block text-lg font-medium py-2 border-b">Dry Vegetables</a>
+                    <a href="#fruits-nuts" onclick="toggleMobileMenu()" class="block text-lg font-medium py-2 border-b">Fruits & Nuts</a>
+                    <a href="#bulk" onclick="toggleMobileMenu()" class="block text-lg font-medium py-2 border-b">Bulk Export</a>
+                    <a href="#payment" onclick="toggleMobileMenu()" class="block text-lg font-medium py-2 border-b">Payment & Banking</a>
+                    <a href="#contact" onclick="toggleMobileMenu()" class="block text-lg font-medium py-2 border-b">Contact</a>
+                </nav>
+            </div>
+        </div>
+        
+        <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity opacity-0"></div>
+        <div id="cart-drawer" class="cart-drawer fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div class="p-6 border-b border-warm-200 flex justify-between items-center bg-brand-50">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold">Your Cart</h2>
+                    <p class="text-sm text-warm-600" id="cart-item-count">0 items</p>
+                </div>
+                <button onclick="toggleCart()" class="p-2 hover:bg-warm-200 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+            <div class="p-6 border-t border-warm-200 bg-warm-50">
+                <div class="space-y-3 mb-6">
+                    <div class="flex justify-between text-warm-600"><span>Subtotal</span><span id="cart-subtotal" class="font-medium">$0.00</span></div>
+                    <div class="flex justify-between text-warm-600"><span>International Shipping</span><span id="cart-shipping" class="font-medium">Calculated at checkout</span></div>
+                    <div class="flex justify-between text-xl font-bold text-warm-900 pt-3 border-t-2 border-warm-200"><span>Estimated Total</span><span id="cart-total">$0.00</span></div>
+                </div>
+                <button onclick="openCheckout()" id="checkout-btn" class="w-full bg-brand-600 text-white py-4 rounded-xl font-bold hover:bg-brand-700 transition shadow-lg disabled:opacity-50">Proceed to International Checkout</button>
+                <button onclick="clearCart()" class="w-full border-2 border-warm-300 text-warm-600 py-3 rounded-xl font-medium hover:bg-warm-100 transition mt-3">Clear Cart</button>
+            </div>
+        </div>
+        
+        <div id="checkout-modal" class="checkout-modal">
+            <div class="checkout-content">
+                <div class="p-6 border-b border-warm-200 flex justify-between items-center bg-brand-50">
+                    <h2 class="text-2xl font-serif font-bold">International Checkout</h2>
+                    <button onclick="closeCheckout()" class="p-2 hover:bg-warm-200 rounded-full">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="bg-warm-50 p-4 rounded-xl">
+                        <h3 class="font-bold text-warm-900 mb-3">Order Summary</h3>
+                        <div id="checkout-items" class="space-y-2 text-sm mb-3 max-h-40 overflow-y-auto"></div>
+                        <div class="border-t border-warm-200 pt-3 space-y-1">
+                            <div class="flex justify-between text-warm-600"><span>Subtotal</span><span id="checkout-subtotal">$0.00</span></div>
+                            <div class="flex justify-between text-warm-600"><span>Shipping</span><span id="checkout-shipping">$0.00</span></div>
+                            <div class="flex justify-between text-lg font-bold text-warm-900"><span>Total</span><span id="checkout-total">$0.00</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-2">Ship To *</label>
+                        <select id="shipping-country" onchange="calculateInternationalShipping()" class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                            <option value="">Select Country</option>
+                            <option value="US" data-zone="1">🇺🇸 United States</option>
+                            <option value="UK" data-zone="1">🇬🇧 United Kingdom</option>
+                            <option value="CA" data-zone="1">🇨🇦 Canada</option>
+                            <option value="AU" data-zone="2">🇦🇺 Australia</option>
+                            <option value="DE" data-zone="1">🇩🇪 Germany</option>
+                            <option value="FR" data-zone="1">🇫🇷 France</option>
+                            <option value="SG" data-zone="2">🇸🇬 Singapore</option>
+                            <option value="JP" data-zone="2">🇯🇵 Japan</option>
+                            <option value="AE" data-zone="2">🇦🇪 UAE</option>
+                            <option value="OTHER" data-zone="3">🌍 Other Country</option>
+                        </select>
+                    </div>
+                    <div id="shipping-methods" class="hidden">
+                        <label class="block text-sm font-medium text-warm-700 mb-2">Shipping Method *</label>
+                        <div class="space-y-2">
+                            <button onclick="selectShipping('express')" id="ship-express" class="shipping-option w-full p-4 rounded-xl text-left">
+                                <div class="flex justify-between items-center">
+                                    <div><p class="font-bold text-warm-900">DHL/FedEx Express</p><p class="text-sm text-warm-500">3-5 business days</p></div>
+                                    <span id="express-price" class="font-bold text-brand-600">$0.00</span>
+                                </div>
+                            </button>
+                            <button onclick="selectShipping('standard')" id="ship-standard" class="shipping-option w-full p-4 rounded-xl text-left">
+                                <div class="flex justify-between items-center">
+                                    <div><p class="font-bold text-warm-900">Standard International</p><p class="text-sm text-warm-500">7-14 business days</p></div>
+                                    <span id="standard-price" class="font-bold text-brand-600">$0.00</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-warm-900 mb-3">Delivery Details</h3>
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="text" id="checkout-fname" placeholder="First Name *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                                <input type="text" id="checkout-lname" placeholder="Last Name *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <input type="email" id="checkout-email" placeholder="Email Address *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                            <input type="text" id="checkout-address1" placeholder="Address Line 1 *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                            <input type="text" id="checkout-address2" placeholder="Address Line 2" class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                            <div class="grid grid-cols-3 gap-3">
+                                <input type="text" id="checkout-city" placeholder="City *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                                <input type="text" id="checkout-state" placeholder="State/Province" class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                                <input type="text" id="checkout-zip" placeholder="ZIP/Postal *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <input type="tel" id="checkout-phone" placeholder="Phone Number *" required class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-warm-900 mb-3">Payment Method</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="selectPayment('card')" id="pay-card" class="payment-method p-4 rounded-xl text-left">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                                    </div>
+                                    <div><p class="font-bold text-sm">Credit Card</p><p class="text-xs text-warm-500">Visa, Mastercard</p></div>
+                                </div>
+                            </button>
+                            <button onclick="selectPayment('paypal')" id="pay-paypal" class="payment-method p-4 rounded-xl text-left">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-800">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .757-.629h6.724c2.838 0 5.098 2.267 5.098 4.872 0 1.469-.612 2.833-1.634 3.83.933 1.12 1.451 2.546 1.451 4.038 0 3.536-2.88 6.416-6.417 6.416h-1.8z"/></svg>
+                                    </div>
+                                    <div><p class="font-bold text-sm">PayPal</p><p class="text-xs text-warm-500">Secure checkout</p></div>
+                                </div>
+                            </button>
+                            <button onclick="selectPayment('transfer')" id="pay-transfer" class="payment-method p-4 rounded-xl text-left">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                    </div>
+                                    <div><p class="font-bold text-sm">Bank Transfer</p><p class="text-xs text-warm-500">Wire/SEPA</p></div>
+                                </div>
+                            </button>
+                            <button onclick="selectPayment('crypto')" id="pay-crypto" class="payment-method p-4 rounded-xl text-left">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                    <div><p class="font-bold text-sm">Crypto</p><p class="text-xs text-warm-500">BTC, ETH, USDT</p></div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div><textarea id="checkout-notes" placeholder="Order notes (optional)" rows="2" class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500"></textarea></div>
+                    <div class="flex items-start space-x-2">
+                        <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 text-brand-600 rounded">
+                        <label for="terms" class="text-sm text-warm-600">I agree to the <a href="#" class="text-brand-600 underline">Terms</a> and understand that import duties may apply in my country.</label>
+                    </div>
+                    <button onclick="placeOrder()" id="place-order-btn" class="w-full bg-brand-600 text-white py-4 rounded-xl font-bold hover:bg-brand-700 transition shadow-lg">Complete International Order</button>
+                </div>
+            </div>
+        </div>
+        
+        <section id="home" class="relative bg-gradient-to-br from-brand-900 via-brand-800 to-warm-900 py-20 lg:py-32 text-white overflow-hidden">
+            <div class="absolute inset-0 opacity-20">
+                <div class="absolute top-20 left-10 w-72 h-72 bg-gold-400 rounded-full mix-blend-overlay filter blur-3xl"></div>
+                <div class="absolute bottom-20 right-10 w-96 h-96 bg-brand-400 rounded-full mix-blend-overlay filter blur-3xl"></div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <img id="hero-logo" src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg" alt="CeylonNest" class="hero-logo bg-white/10 backdrop-blur p-2">
+                            <div id="hero-badge" class="inline-block bg-white/10 backdrop-blur text-gold-400 px-4 py-2 rounded-full text-sm font-bold border border-gold-400/30">🌏 EXPORT QUALITY • CEYLON ORIGIN</div>
+                        </div>
+                        <h1 id="hero-title" class="font-serif text-4xl lg:text-6xl font-bold leading-tight mb-6">Authentic Sri Lankan <span class="text-gold-400">Spices & Dry Foods</span></h1>
+                        <p id="hero-description" class="text-lg text-brand-100 mb-8 leading-relaxed">Premium Ceylon cinnamon, curry leaves, gotukola, and traditional dry vegetables delivered to your kitchen worldwide. We ship to USA, UK, Europe, Australia, Asia & Middle East.</p>
+                        <div id="hero-countries" class="flex flex-wrap gap-3 mb-8">
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">🇺🇸 USA</span>
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">🇬🇧 UK</span>
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">🇪🇺 EU</span>
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">🇦🇺 Australia</span>
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">🇨🇦 Canada</span>
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">🇦🇪 UAE</span>
+                            <span class="bg-white/10 px-3 py-1 rounded-full text-sm">+50 more</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="#spices" class="inline-flex items-center justify-center px-8 py-4 bg-gold-500 text-warm-900 font-bold rounded-full hover:bg-gold-400 transition shadow-lg">Shop Now<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></a>
+                            <a href="#shipping" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition">Shipping Calculator</a>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <img id="hero-image" src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=800&h=800&fit=crop" alt="Premium Sri Lankan spices" class="rounded-3xl shadow-2xl object-cover w-full h-full lazy-img loaded border-4 border-gold-400/30">
+                        <div class="absolute -bottom-6 -left-6 bg-white text-warm-900 p-4 rounded-2xl shadow-xl">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div><p class="font-bold">ISO 22000</p><p class="text-xs text-warm-500">Certified Export</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-12 bg-white border-b border-warm-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-warm-900">100% Organic</h4>
+                        <p class="text-sm text-warm-500">No preservatives</p>
+                    </div>
+                    <div>
+                        <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-warm-900">Global Shipping</h4>
+                        <p class="text-sm text-warm-500">DHL & FedEx</p>
+                    </div>
+                    <div>
+                        <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-warm-900">3-5 Days Express</h4>
+                        <p class="text-sm text-warm-500">To major countries</p>
+                    </div>
+                    <div>
+                        <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-warm-900">Export Certified</h4>
+                        <p class="text-sm text-warm-500">FDA, EU standards</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-16 bg-warm-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl font-bold text-warm-900 mb-4">Most Popular Internationally</h2>
+                    <p class="text-warm-600">Loved by chefs and home cooks in 50+ countries</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="featured-products"></div>
+            </div>
+        </section>
+        
+        <section id="spices" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-gold-600 font-semibold tracking-wider uppercase text-sm">Ceylon Origin</span>
+                    <h2 id="spices-title" class="font-serif text-3xl lg:text-4xl font-bold text-warm-900 mt-2 mb-4">Authentic Sri Lankan Spices</h2>
+                    <p id="spices-description" class="text-warm-600 max-w-2xl mx-auto">Premium Ceylon cinnamon, curry leaves, and medicinal herbs. Sun-dried and packed for maximum potency.</p>
+                </div>
+                <div id="spices-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+        
+        <section id="dry-vegetables" class="py-20 bg-brand-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-brand-600 font-semibold tracking-wider uppercase text-sm">Traditional</span>
+                    <h2 id="vegetables-title" class="font-serif text-3xl lg:text-4xl font-bold text-warm-900 mt-2 mb-4">Dry Vegetables</h2>
+                    <p id="vegetables-description" class="text-warm-600 max-w-2xl mx-auto">Essential ingredients for authentic Sri Lankan cooking. Rehydrates to 4x original weight.</p>
+                </div>
+                <div id="vegetables-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+        
+        <section id="fruits-nuts" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-gold-600 font-semibold tracking-wider uppercase text-sm">Premium Selection</span>
+                    <h2 id="fruits-title" class="font-serif text-3xl lg:text-4xl font-bold text-warm-900 mt-2 mb-4">Dried Fruits & Nuts</h2>
+                    <p id="fruits-description" class="text-warm-600 max-w-2xl mx-auto">Naturally sweet tropical fruits and protein-rich nuts from Sri Lankan farms.</p>
+                </div>
+                <div id="fruits-nuts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+        
+        <section id="bulk" class="py-20 bg-warm-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 id="bulk-title" class="font-serif text-3xl lg:text-4xl font-bold mb-4">Wholesale & Bulk Export</h2>
+                    <p id="bulk-description" class="text-warm-300 max-w-2xl mx-auto">Professional quantities for restaurants, retailers, and distributors. Custom packaging available.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
+                        <div class="text-gold-400 text-sm font-bold mb-2">RESTAURANT STARTER</div>
+                        <h3 class="text-2xl font-bold mb-4">5kg Mixed Pack</h3>
+                        <ul class="space-y-3 mb-6 text-warm-200">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Dry Karapincha 1kg</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Ceylon Cinnamon 1kg</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Dried Mango 1kg</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Cashews 2kg</li>
+                        </ul>
+                        <div class="text-3xl font-bold text-gold-400 mb-6">$185.00</div>
+                        <button onclick="addBulkToCart('starter')" class="w-full bg-gold-500 text-warm-900 py-3 rounded-xl font-bold hover:bg-gold-400 transition">Add to Cart</button>
+                    </div>
+                    
+                    <div class="bg-brand-600 rounded-3xl p-8 border-2 border-gold-400 relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gold-500 text-warm-900 text-xs font-bold px-4 py-1 rounded-full">MOST POPULAR</div>
+                        <div class="text-gold-300 text-sm font-bold mb-2">PROFESSIONAL</div>
+                        <h3 class="text-2xl font-bold mb-4">20kg Export Pack</h3>
+                        <ul class="space-y-3 mb-6 text-brand-100">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Custom product mix</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Private label packaging</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Export documentation</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Free express shipping</li>
+                        </ul>
+                        <div class="text-3xl font-bold text-white mb-6">$680.00</div>
+                        <button onclick="addBulkToCart('professional')" class="w-full bg-white text-brand-600 py-3 rounded-xl font-bold hover:bg-brand-50 transition">Request Quote</button>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
+                        <div class="text-gold-400 text-sm font-bold mb-2">ENTERPRISE</div>
+                        <h3 class="text-2xl font-bold mb-4">100kg Container</h3>
+                        <ul class="space-y-3 mb-6 text-warm-200">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Full container load</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Sea freight included</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Customs clearance support</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-gold-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Dedicated account manager</li>
+                        </ul>
+                        <div class="text-3xl font-bold text-gold-400 mb-6">$2,900.00</div>
+                        <button onclick="addBulkToCart('enterprise')" class="w-full bg-gold-500 text-warm-900 py-3 rounded-xl font-bold hover:bg-gold-400 transition">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="shipping" class="py-20 bg-brand-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl lg:text-4xl font-bold text-warm-900 mb-4">International Shipping Calculator</h2>
+                    <p class="text-warm-600">Estimate delivery costs to your country</p>
+                </div>
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-warm-700 mb-2">Destination Country</label>
+                            <select id="calc-country" onchange="calculateEstimate()" class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                                <option value="">Select country...</option>
+                                <option value="US">🇺🇸 United States</option>
+                                <option value="UK">🇬🇧 United Kingdom</option>
+                                <option value="CA">🇨🇦 Canada</option>
+                                <option value="AU">🇦🇺 Australia</option>
+                                <option value="DE">🇩🇪 Germany</option>
+                                <option value="FR">🇫🇷 France</option>
+                                <option value="SG">🇸🇬 Singapore</option>
+                                <option value="JP">🇯🇵 Japan</option>
+                                <option value="AE">🇦🇪 UAE</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-warm-700 mb-2">Package Weight</label>
+                            <select id="calc-weight" onchange="calculateEstimate()" class="w-full px-4 py-3 border border-warm-200 rounded-xl focus:ring-2 focus:ring-brand-500">
+                                <option value="1">Up to 1kg</option>
+                                <option value="2">1-2kg</option>
+                                <option value="5">2-5kg</option>
+                                <option value="10">5-10kg</option>
+                                <option value="20">10-20kg</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="shipping-estimate" class="hidden bg-brand-50 rounded-xl p-6">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-xl border-2 border-brand-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-warm-900">Express (3-5 days)</span>
+                                    <span id="express-estimate" class="text-xl font-bold text-brand-600">$0.00</span>
+                                </div>
+                                <p class="text-sm text-warm-500">DHL/FedEx Priority</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-warm-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-warm-900">Standard (7-14 days)</span>
+                                    <span id="standard-estimate" class="text-xl font-bold text-warm-600">$0.00</span>
+                                </div>
+                                <p class="text-sm text-warm-500">International Post</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-warm-500 mt-4 text-center">* Import duties and taxes may apply and are customer's responsibility</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="about" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <img id="about-image" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&h=600&fit=crop" alt="Sri Lankan spice processing" class="rounded-3xl shadow-xl w-full lazy-img">
+                    </div>
+                    <div>
+                        <span id="about-badge" class="text-gold-600 font-semibold tracking-wider uppercase text-sm">Since 2018</span>
+                        <h2 id="about-title" class="font-serif text-3xl lg:text-4xl font-bold text-warm-900 mt-2 mb-6">Exporting Ceylon's Finest to the World</h2>
+                        <p id="about-text" class="text-warm-600 text-lg mb-6">Based in Colombo, Sri Lanka, CeylonNest specializes in exporting premium dry foods that meet international standards. Our FDA-registered facility processes over 10 tons monthly for export to 50+ countries.</p>
+                        <div class="grid grid-cols-3 gap-6 mb-8">
+                            <div class="text-center p-4 bg-brand-50 rounded-xl">
+                                <p class="text-3xl font-bold text-brand-600">50+</p>
+                                <p class="text-sm text-warm-500">Countries</p>
+                            </div>
+                            <div class="text-center p-4 bg-brand-50 rounded-xl">
+                                <p class="text-3xl font-bold text-brand-600">10T</p>
+                                <p class="text-sm text-warm-500">Monthly Export</p>
+                            </div>
+                            <div class="text-center p-4 bg-brand-50 rounded-xl">
+                                <p class="text-3xl font-bold text-brand-600">99.8%</p>
+                                <p class="text-sm text-warm-500">Customs Clearance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-20 bg-warm-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl font-bold text-warm-900 mb-4">What International Buyers Say</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6" id="reviews-grid"></div>
+            </div>
+        </section>
+        
+        <section class="py-20 bg-white">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl font-bold text-warm-900 mb-4">International Shipping FAQ</h2>
+                </div>
+                <div class="space-y-4" id="faq-container"></div>
+            </div>
+        </section>
+        
+        <section id="payment" class="py-20 bg-gradient-to-br from-warm-50 to-brand-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-gold-600 font-semibold tracking-wider uppercase text-sm">Secure Transactions</span>
+                    <h2 class="font-serif text-3xl lg:text-4xl font-bold text-warm-900 mt-2 mb-4">Payment & Banking Details</h2>
+                    <p class="text-warm-600 max-w-2xl mx-auto">We accept international wire transfers in multiple currencies. All bank details are verified and secure.</p>
+                </div>
+
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-xl">
+                    <div class="flex items-start">
+                        <svg class="w-6 h-6 text-amber-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="font-bold text-amber-900 mb-1">Security Notice</h4>
+                            <p class="text-sm text-amber-800">Always verify bank details on this official website before making transfers.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-8">
+                    <button onclick="switchCurrency('usd')" id="tab-usd" class="currency-tab px-6 py-3 rounded-full font-bold bg-brand-600 text-white shadow-lg transition-all">🇺🇸 USD Account</button>
+                    <button onclick="switchCurrency('eur')" id="tab-eur" class="currency-tab px-6 py-3 rounded-full font-bold bg-white text-warm-600 border-2 border-warm-200 hover:border-brand-300 transition-all">🇪🇺 EUR Account</button>
+                    <button onclick="switchCurrency('gbp')" id="tab-gbp" class="currency-tab px-6 py-3 rounded-full font-bold bg-white text-warm-600 border-2 border-warm-200 hover:border-brand-300 transition-all">🇬🇧 GBP Account</button>
+                    <button onclick="switchCurrency('aud')" id="tab-aud" class="currency-tab px-6 py-3 rounded-full font-bold bg-white text-warm-600 border-2 border-warm-200 hover:border-brand-300 transition-all">🇦🇺 AUD Account</button>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="bank-card bg-white rounded-3xl shadow-lg p-8 border border-warm-200">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xl text-warm-900">Bank Transfer Details</h3>
+                                    <p class="text-sm text-warm-500" id="account-currency-label">USD Account</p>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">ACTIVE</span>
+                        </div>
+
+                        <div class="space-y-4" id="bank-details-container">
+                            <div class="bg-warm-50 rounded-xl p-4 border border-warm-200">
+                                <label class="block text-xs font-semibold text-warm-500 uppercase tracking-wider mb-1">Account Name</label>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-warm-900 text-lg" id="account-name">CeylonNest Exports (Pvt) Ltd</span>
+                                    <button onclick="copyToClipboard('account-name')" class="copy-btn p-2 rounded-lg text-warm-400 hover:text-brand-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-warm-50 rounded-xl p-4 border border-warm-200">
+                                <label class="block text-xs font-semibold text-warm-500 uppercase tracking-wider mb-1">Bank Name</label>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-warm-900" id="bank-name">Commercial Bank of Ceylon PLC</span>
+                                    <button onclick="copyToClipboard('bank-name')" class="copy-btn p-2 rounded-lg text-warm-400 hover:text-brand-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-50 rounded-xl p-4 border-2 border-brand-200">
+                                <label class="block text-xs font-semibold text-brand-600 uppercase tracking-wider mb-1">SWIFT/BIC Code</label>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-brand-700 text-2xl font-mono" id="swift-code">CCEYLKLX</span>
+                                    <button onclick="copyToClipboard('swift-code')" class="copy-btn p-2 rounded-lg text-brand-400 hover:text-brand-700">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-brand-600 mt-1">Required for all international transfers</p>
+                            </div>
+
+                            <div class="bg-warm-50 rounded-xl p-4 border border-warm-200">
+                                <label class="block text-xs font-semibold text-warm-500 uppercase tracking-wider mb-1">Account Number</label>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-warm-900 text-lg font-mono" id="account-number">1001234567</span>
+                                    <button onclick="copyToClipboard('account-number')" class="copy-btn p-2 rounded-lg text-warm-400 hover:text-brand-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-warm-50 rounded-xl p-4 border border-warm-200 hidden" id="iban-container">
+                                <label class="block text-xs font-semibold text-warm-500 uppercase tracking-wider mb-1">IBAN</label>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-warm-900 text-lg font-mono break-all" id="iban-code">LK89CCEY1001234567</span>
+                                    <button onclick="copyToClipboard('iban-code')" class="copy-btn p-2 rounded-lg text-warm-400 hover:text-brand-600 flex-shrink-0 ml-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-warm-50 rounded-xl p-4 border border-warm-200">
+                                <label class="block text-xs font-semibold text-warm-500 uppercase tracking-wider mb-1">Bank Address</label>
+                                <p class="text-sm text-warm-700" id="bank-address">Commercial Bank of Ceylon PLC,<br>No. 21, Sir Razik Fareed Mawatha,<br>Colombo 01, Sri Lanka</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-3xl shadow-lg p-8 border border-warm-200">
+                            <h3 class="font-bold text-xl text-warm-900 mb-6 flex items-center">
+                                <svg class="w-6 h-6 text-brand-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Transfer Instructions
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4 p-4 bg-brand-50 rounded-xl">
+                                    <div class="w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+                                    <div>
+                                        <h4 class="font-bold text-warm-900 mb-1">Select "OUR" for Transfer Fees</h4>
+                                        <p class="text-sm text-warm-600">Please select "OUR" (sender pays all fees) when making the transfer.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4 p-4 bg-brand-50 rounded-xl">
+                                    <div class="w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+                                    <div>
+                                        <h4 class="font-bold text-warm-900 mb-1">Include Order Reference</h4>
+                                        <p class="text-sm text-warm-600">Add your Order ID in the transfer reference field.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4 p-4 bg-brand-50 rounded-xl">
+                                    <div class="w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+                                    <div>
+                                        <h4 class="font-bold text-warm-900 mb-1">Email Confirmation</h4>
+                                        <p class="text-sm text-warm-600">Send proof of payment to <a href="mailto:hello@ceylonnest.lk" class="text-brand-600 underline">hello@ceylonnest.lk</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-3xl shadow-lg p-8 border border-warm-200">
+                            <h3 class="font-bold text-xl text-warm-900 mb-4">Alternative Payment Methods</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-warm-50 rounded-xl">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .757-.629h6.724c2.838 0 5.098 2.267 5.098 4.872 0 1.469-.612 2.833-1.634 3.83.933 1.12 1.451 2.546 1.451 4.038 0 3.536-2.88 6.416-6.417 6.416h-1.8z"/></svg>
+                                        </div>
+                                        <div><p class="font-bold text-sm">PayPal</p><p class="text-xs text-warm-500">hello@ceylonnest.lk</p></div>
+                                    </div>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Instant</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-warm-50 rounded-xl">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </div>
+                                        <div><p class="font-bold text-sm">Cryptocurrency</p><p class="text-xs text-warm-500">BTC, ETH, USDT Available</p></div>
+                                    </div>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Instant</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" class="py-20 bg-brand-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h2 id="contact-title" class="font-serif text-3xl font-bold mb-6">Contact Our Export Team</h2>
+                        <p id="contact-text" class="text-brand-200 mb-8">Have questions about shipping to your country? Our international team responds within 24 hours.</p>
+                        <div class="space-y-6 mb-8">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Email</h4>
+                                    <a id="contact-email" href="mailto:hello@ceylonnest.lk" class="text-gold-400 hover:underline">hello@ceylonnest.lk</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.041L0 24l5.289-1.941A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">WhatsApp Business</h4>
+                                    <a id="contact-phone" href="https://wa.me/94752448924" target="_blank" class="text-gold-400 hover:underline">+94 75 244 8924</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a id="contact-facebook" href="https://web.facebook.com/profile.php?id=61588451505075" target="_blank" class="px-6 py-3 bg-blue-600 rounded-xl font-bold hover:bg-blue-700 transition">Facebook</a>
+                            <a id="contact-instagram" href="https://www.instagram.com/hello.ceylonnest/" target="_blank" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:opacity-90 transition">Instagram</a>
+                        </div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur rounded-3xl p-8">
+                        <form onsubmit="event.preventDefault(); alert('Message sent! We will reply within 24 hours.');">
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="text" placeholder="Name" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-gold-400">
+                                    <input type="email" placeholder="Email" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-gold-400">
+                                </div>
+                                <input type="text" placeholder="Country" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-gold-400">
+                                <textarea placeholder="How can we help?" rows="4" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-gold-400"></textarea>
+                                <button type="submit" class="w-full bg-gold-500 text-warm-900 py-4 rounded-xl font-bold hover:bg-gold-400 transition">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="bg-warm-950 text-warm-400 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <img id="footer-logo" src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg" alt="CeylonNest" class="h-10 w-10 object-cover rounded-lg bg-white">
+                            <span id="footer-brand-name" class="font-serif text-xl font-bold text-white">CeylonNest</span>
+                        </div>
+                        <p id="footer-tagline" class="text-sm">Premium Sri Lankan dry foods and spices for the global market.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-4">Products</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#spices" class="hover:text-gold-400">Ceylon Spices</a></li>
+                            <li><a href="#dry-vegetables" class="hover:text-gold-400">Dry Vegetables</a></li>
+                            <li><a href="#fruits-nuts" class="hover:text-gold-400">Fruits & Nuts</a></li>
+                            <li><a href="#bulk" class="hover:text-gold-400">Bulk Export</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-4">Support</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#shipping" class="hover:text-gold-400">Shipping Calculator</a></li>
+                            <li><a href="#payment" class="hover:text-gold-400">Payment & Banking</a></li>
+                            <li><a href="#" class="hover:text-gold-400">Track Order</a></li>
+                            <li><a href="#" class="hover:text-gold-400">Customs Info</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-4">Contact</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li id="footer-email">hello@ceylonnest.lk</li>
+                            <li id="footer-phone">+94 75 244 8924</li>
+                            <li id="footer-address">Colombo, Sri Lanka</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-warm-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                    <p id="footer-copyright" class="text-sm">© 2024 CeylonNest. Export License SL-2024-0892.</p>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#" class="hover:text-white">Privacy</a>
+                        <a href="#" class="hover:text-white">Terms</a>
+                        <a href="#" class="hover:text-white">Export Compliance</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <a href="https://wa.me/94752448924" target="_blank" class="fixed bottom-6 right-6 z-40 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition">
+            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.041L0 24l5.289-1.941A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        </a>
+        
+        <button onclick="scrollToTop()" id="back-to-top" class="back-to-top fixed bottom-24 right-6 z-40 bg-brand-600 text-white p-3 rounded-full shadow-lg hover:bg-brand-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+        </button>
+
+        <button onclick="openLoginModal()" class="admin-toggle-btn" title="Admin Dashboard">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="login-modal">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-warm-900">Admin Login</h2>
+                <p class="text-warm-500 mt-2">Enter your credentials to access the dashboard</p>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-1">Username</label>
+                        <input type="text" id="login-username" class="form-input" placeholder="admin" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-1">Password</label>
+                        <input type="password" id="login-password" class="form-input" placeholder="••••••" required>
+                    </div>
+                    <div id="login-error" class="text-red-500 text-sm hidden">Invalid credentials. Try admin/admin123</div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeLoginModal()" class="flex-1 btn-secondary">Cancel</button>
+                    <button type="submit" class="flex-1 btn-primary">Login</button>
+                </div>
+            </form>
+            <div class="mt-6 p-4 bg-warm-50 rounded-xl">
+                <p class="text-xs text-warm-500 text-center">
+                    <strong>Default Login:</strong><br>
+                    Username: <code class="bg-warm-200 px-1 rounded">admin</code><br>
+                    Password: <code class="bg-warm-200 px-1 rounded">admin123</code>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="admin-panel" class="admin-panel">
+        <aside class="admin-sidebar">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold">Admin Panel</h3>
+                        <p class="text-warm-400 text-xs">CeylonNest</p>
+                    </div>
+                </div>
+                <nav class="space-y-1">
+                    <button onclick="showAdminTab('dashboard')" id="nav-dashboard" class="admin-nav-item active w-full flex items-center space-x-3 px-4 py-3 text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <span>Dashboard</span>
+                    </button>
+                    <button onclick="showAdminTab('settings')" id="nav-settings" class="admin-nav-item w-full flex items-center space-x-3 px-4 py-3 text-warm-300 hover:text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                        <span>Website Settings</span>
+                    </button>
+                    <button onclick="showAdminTab('products')" id="nav-products" class="admin-nav-item w-full flex items-center space-x-3 px-4 py-3 text-warm-300 hover:text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        <span>Products</span>
+                    </button>
+                    <button onclick="showAdminTab('content')" id="nav-content" class="admin-nav-item w-full flex items-center space-x-3 px-4 py-3 text-warm-300 hover:text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <span>Content Editor</span>
+                    </button>
+                    <button onclick="showAdminTab('orders')" id="nav-orders" class="admin-nav-item w-full flex items-center space-x-3 px-4 py-3 text-warm-300 hover:text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span>Orders</span>
+                    </button>
+                </nav>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-warm-800">
+                <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span>Logout</span>
+                </button>
+                <button onclick="closeAdminPanel()" class="w-full mt-2 flex items-center justify-center space-x-2 px-4 py-3 text-warm-400 hover:text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <span>Back to Website</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <!-- Dashboard Tab -->
+            <div id="tab-dashboard" class="tab-content active p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-warm-900">Dashboard</h1>
+                        <p class="text-warm-500 mt-1">Welcome back! Here's what's happening with your store.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-warm-500">Last updated</p>
+                        <p class="font-medium" id="last-updated">Just now</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            </div>
+                            <span class="text-green-500 text-sm font-medium">+12%</span>
+                        </div>
+                        <p class="text-warm-500 text-sm">Total Orders</p>
+                        <p class="text-3xl font-bold text-warm-900" id="stat-orders">24</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-gold-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <span class="text-green-500 text-sm font-medium">+8%</span>
+                        </div>
+                        <p class="text-warm-500 text-sm">Revenue</p>
+                        <p class="text-3xl font-bold text-warm-900" id="stat-revenue">$3,420</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            </div>
+                            <span class="text-warm-400 text-sm font-medium">-</span>
+                        </div>
+                        <p class="text-warm-500 text-sm">Products</p>
+                        <p class="text-3xl font-bold text-warm-900" id="stat-products">18</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </div>
+                            <span class="text-green-500 text-sm font-medium">+5%</span>
+                        </div>
+                        <p class="text-warm-500 text-sm">Customers</p>
+                        <p class="text-3xl font-bold text-warm-900" id="stat-customers">156</p>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Recent Orders</h3>
+                        <div id="recent-orders-list" class="space-y-3">
+                            <p class="text-warm-500 text-center py-8">No recent orders</p>
+                        </div>
+                    </div>
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="showAdminTab('products')" class="p-4 bg-brand-50 rounded-xl hover:bg-brand-100 transition text-left">
+                                <svg class="w-8 h-8 text-brand-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                <p class="font-medium text-warm-900">Add Product</p>
+                            </button>
+                            <button onclick="showAdminTab('content')" class="p-4 bg-gold-50 rounded-xl hover:bg-gold-100 transition text-left">
+                                <svg class="w-8 h-8 text-gold-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                <p class="font-medium text-warm-900">Edit Content</p>
+                            </button>
+                            <button onclick="showAdminTab('settings')" class="p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition text-left">
+                                <svg class="w-8 h-8 text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                                <p class="font-medium text-warm-900">Settings</p>
+                            </button>
+                            <button onclick="window.open('#home', '_blank')" class="p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition text-left">
+                                <svg class="w-8 h-8 text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                <p class="font-medium text-warm-900">View Site</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="tab-settings" class="tab-content p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-warm-900">Website Settings</h1>
+                    <p class="text-warm-500 mt-1">Customize your website appearance and information.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-brand-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            General Information
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Website Title</label>
+                                <input type="text" id="setting-site-title" class="form-input" placeholder="CeylonNest">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Brand Name</label>
+                                <input type="text" id="setting-brand-name" class="form-input" placeholder="CeylonNest">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Tagline</label>
+                                <input type="text" id="setting-tagline" class="form-input" placeholder="Premium Sri Lankan Dry Foods">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Logo URL</label>
+                                <input type="text" id="setting-logo" class="form-input" placeholder="https://...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Favicon URL</label>
+                                <input type="text" id="setting-favicon" class="form-input" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            Contact Information
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Email</label>
+                                <input type="email" id="setting-email" class="form-input" placeholder="hello@ceylonnest.lk">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Phone</label>
+                                <input type="tel" id="setting-phone" class="form-input" placeholder="+94 75 244 8924">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Address</label>
+                                <input type="text" id="setting-address" class="form-input" placeholder="Colombo, Sri Lanka">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Facebook URL</label>
+                                <input type="text" id="setting-facebook" class="form-input" placeholder="https://facebook.com/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Instagram URL</label>
+                                <input type="text" id="setting-instagram" class="form-input" placeholder="https://instagram.com/...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-gold-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Hero Section
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Hero Title</label>
+                                <input type="text" id="setting-hero-title" class="form-input" placeholder="Main headline">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Hero Description</label>
+                                <textarea id="setting-hero-description" rows="3" class="form-input" placeholder="Subheading text..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Hero Image URL</label>
+                                <input type="text" id="setting-hero-image" class="form-input" placeholder="https://...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Hero Badge</label>
+                                <input type="text" id="setting-hero-badge" class="form-input" placeholder="EXPORT QUALITY • CEYLON ORIGIN">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Top Bar & Footer
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Top Bar Text</label>
+                                <input type="text" id="setting-top-bar" class="form-input" placeholder="We Ship Worldwide | DHL & FedEx Express...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Copyright Text</label>
+                                <input type="text" id="setting-copyright" class="form-input" placeholder="© 2024 CeylonNest...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">About Badge (Year)</label>
+                                <input type="text" id="setting-about-badge" class="form-input" placeholder="Since 2018">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">About Title</label>
+                                <input type="text" id="setting-about-title" class="form-input" placeholder="Exporting Ceylon's Finest...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end space-x-4">
+                    <button onclick="resetSettings()" class="btn-secondary">Reset to Default</button>
+                    <button onclick="saveSettings()" class="btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="tab-products" class="tab-content p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-warm-900">Products</h1>
+                        <p class="text-warm-500 mt-1">Manage your product catalog.</p>
+                    </div>
+                    <button onclick="openProductModal()" class="btn-primary flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span>Add Product</span>
+                    </button>
+                </div>
+
+                <div class="flex space-x-2 mb-6">
+                    <button onclick="filterProducts('all')" id="filter-all" class="px-4 py-2 rounded-lg font-medium bg-brand-600 text-white">All</button>
+                    <button onclick="filterProducts('spices')" id="filter-spices" class="px-4 py-2 rounded-lg font-medium bg-warm-100 text-warm-600 hover:bg-warm-200">Spices</button>
+                    <button onclick="filterProducts('vegetables')" id="filter-vegetables" class="px-4 py-2 rounded-lg font-medium bg-warm-100 text-warm-600 hover:bg-warm-200">Vegetables</button>
+                    <button onclick="filterProducts('fruitsNuts')" id="filter-fruitsNuts" class="px-4 py-2 rounded-lg font-medium bg-warm-100 text-warm-600 hover:bg-warm-200">Fruits & Nuts</button>
+                </div>
+
+                <div class="admin-card overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-warm-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Product</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Category</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Base Price</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Status</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-warm-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-products-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Content Editor Tab -->
+            <div id="tab-content" class="tab-content p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-warm-900">Content Editor</h1>
+                    <p class="text-warm-500 mt-1">Edit section titles and descriptions.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Spices Section</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Title</label>
+                                <input type="text" id="content-spices-title" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Description</label>
+                                <textarea id="content-spices-description" rows="3" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Vegetables Section</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Title</label>
+                                <input type="text" id="content-vegetables-title" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Description</label>
+                                <textarea id="content-vegetables-description" rows="3" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Fruits & Nuts Section</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Title</label>
+                                <input type="text" id="content-fruits-title" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Description</label>
+                                <textarea id="content-fruits-description" rows="3" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Bulk Export Section</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Title</label>
+                                <input type="text" id="content-bulk-title" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Description</label>
+                                <textarea id="content-bulk-description" rows="3" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">About Section</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Text</label>
+                                <textarea id="content-about-text" rows="5" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-lg font-bold text-warm-900 mb-4">Contact Section</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Title</label>
+                                <input type="text" id="content-contact-title" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">Description</label>
+                                <textarea id="content-contact-text" rows="3" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button onclick="saveContent()" class="btn-primary">Save Content Changes</button>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="tab-orders" class="tab-content p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-warm-900">Orders</h1>
+                    <p class="text-warm-500 mt-1">View and manage customer orders.</p>
+                </div>
+
+                <div class="admin-card overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-warm-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Order ID</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Customer</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Items</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Total</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-warm-700">Status</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-warm-700">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table">
+                            <tr>
+                                <td colspan="6" class="px-6 py-12 text-center text-warm-500">No orders yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="login-modal">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-warm-900" id="product-modal-title">Add Product</h2>
+                <button onclick="closeProductModal()" class="p-2 hover:bg-warm-100 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <form onsubmit="handleProductSubmit(event)">
+                <input type="hidden" id="product-edit-id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-1">Product Name *</label>
+                        <input type="text" id="product-name" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-1">Description *</label>
+                        <textarea id="product-description" rows="2" class="form-input" required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-1">Category *</label>
+                        <select id="product-category" class="form-input" required>
+                            <option value="spices">Spices</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruitsNuts">Fruits & Nuts</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-2">Weight Options & Prices *</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="text-xs text-warm-500">250g Price ($)</label>
+                                <input type="number" id="product-price-250" class="form-input" min="0" step="0.01" placeholder="0.00" required>
+                            </div>
+                            <div>
+                                <label class="text-xs text-warm-500">500g Price ($)</label>
+                                <input type="number" id="product-price-500" class="form-input" min="0" step="0.01" placeholder="0.00" required>
+                            </div>
+                            <div>
+                                <label class="text-xs text-warm-500">1kg Price ($)</label>
+                                <input type="number" id="product-price-1000" class="form-input" min="0" step="0.01" placeholder="0.00" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-warm-700 mb-1">Image URL</label>
+                        <input type="text" id="product-image" class="form-input" placeholder="https://...">
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="product-popular" class="w-4 h-4 text-brand-600 rounded">
+                        <label for="product-popular" class="ml-2 text-sm text-warm-700">Mark as Popular</label>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeProductModal()" class="flex-1 btn-secondary">Cancel</button>
+                    <button type="submit" class="flex-1 btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // ==================== DATA & STATE ====================
+        const defaultProducts = [
+            { id: 1, name: "Ceylon Cinnamon Quills", description: "True Ceylon cinnamon (Cinnamomum verum) - sweet, delicate flavor. Export grade.", category: "spices", image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&h=400&fit=crop", popular: true, weights: [{ size: "250g", price: 8.99 }, { size: "500g", price: 15.99 }, { size: "1kg", price: 28.99 }] },
+            { id: 2, name: "Dried Curry Leaves (Karapincha)", description: "Freshly dried curry leaves for authentic Sri Lankan cooking. Vacuum packed.", category: "spices", image: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&h=400&fit=crop", popular: true, weights: [{ size: "250g", price: 6.99 }, { size: "500g", price: 11.99 }, { size: "1kg", price: 20.99 }] },
+            { id: 3, name: "Ceylon Black Pepper", description: "Premium black peppercorns from the hills of Ceylon. Bold, aromatic.", category: "spices", image: "https://images.unsplash.com/photo-1599909533681-3f5b3c940c1e?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 7.99 }, { size: "500g", price: 14.99 }, { size: "1kg", price: 26.99 }] },
+            { id: 4, name: "Dried Gotukola", description: "Medicinal herb powder. Traditional Ayurvedic remedy. 100% organic.", category: "spices", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 6.99 }, { size: "500g", price: 12.99 }, { size: "1kg", price: 22.99 }] },
+            { id: 5, name: "Dried Lemongrass (Sera)", description: "Aromatic lemongrass for teas and curries. Naturally dried.", category: "spices", image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 4.99 }, { size: "500g", price: 8.99 }, { size: "1kg", price: 15.99 }] },
+            { id: 6, name: "Pandan Leaves (Rampe)", description: "Fragrant pandan leaves for rice dishes and desserts.", category: "spices", image: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 4.49 }, { size: "500g", price: 7.99 }, { size: "1kg", price: 14.49 }] },
+            { id: 7, name: "Dry Karapincha (Curry Leaves)", description: "Essential for Sri Lankan cooking. Intense flavor when rehydrated.", category: "vegetables", image: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&h=400&fit=crop", popular: true, weights: [{ size: "250g", price: 5.99 }, { size: "500g", price: 10.99 }, { size: "1kg", price: 19.99 }] },
+            { id: 8, name: "Dried Drumstick Leaves (Moringa)", description: "Nutrient-rich moringa leaves. Superfood from Sri Lanka.", category: "vegetables", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 7.99 }, { size: "500g", price: 14.99 }, { size: "1kg", price: 26.99 }] },
+            { id: 9, name: "Dried Bitter Gourd (Karawila)", description: "Traditional dried bitter gourd for curries. Rehydrates to 4x weight.", category: "vegetables", image: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 6.49 }, { size: "500g", price: 11.99 }, { size: "1kg", price: 21.99 }] },
+            { id: 10, name: "Dried Eggplant (Wambatu)", description: "Sun-dried eggplant slices. Perfect for Sri Lankan pickle.", category: "vegetables", image: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 4.99 }, { size: "500g", price: 8.99 }, { size: "1kg", price: 16.49 }] },
+            { id: 11, name: "Dried Jackfruit (Polos)", description: "Young jackfruit for vegetarian curries. Meat-like texture.", category: "vegetables", image: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?w=400&h=400&fit=crop", popular: true, weights: [{ size: "250g", price: 8.99 }, { size: "500g", price: 16.99 }, { size: "1kg", price: 30.99 }] },
+            { id: 12, name: "Dried Okra (Bandakka)", description: "Crispy dried okra for curries and snacks.", category: "vegetables", image: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 4.49 }, { size: "500g", price: 7.99 }, { size: "1kg", price: 14.99 }] },
+            { id: 13, name: "Premium Cashew Nuts", description: "Whole roasted cashews from Sri Lankan farms. Lightly salted.", category: "fruitsNuts", image: "https://images.unsplash.com/photo-1600189020840-e9918c25268d?w=400&h=400&fit=crop", popular: true, weights: [{ size: "250g", price: 12.99 }, { size: "500g", price: 22.99 }, { size: "1kg", price: 42.99 }] },
+            { id: 14, name: "Dried Mango Slices", description: "Naturally sweet dried mango. No added sugar or preservatives.", category: "fruitsNuts", image: "https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=400&h=400&fit=crop", popular: true, weights: [{ size: "250g", price: 6.99 }, { size: "500g", price: 12.99 }, { size: "1kg", price: 23.99 }] },
+            { id: 15, name: "Dried Pineapple Rings", description: "Sweet and tangy dried pineapple. Perfect snack.", category: "fruitsNuts", image: "https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 6.49 }, { size: "500g", price: 11.99 }, { size: "1kg", price: 21.99 }] },
+            { id: 16, name: "Roasted Peanuts", description: "Crispy roasted peanuts with traditional Sri Lankan spices.", category: "fruitsNuts", image: "https://images.unsplash.com/photo-1600189020840-e9918c25268d?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 3.99 }, { size: "500g", price: 6.99 }, { size: "1kg", price: 12.99 }] },
+            { id: 17, name: "Dried Papaya Chunks", description: "Chewy dried papaya. Rich in vitamins and fiber.", category: "fruitsNuts", image: "https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 5.49 }, { size: "500g", price: 9.99 }, { size: "1kg", price: 18.49 }] },
+            { id: 18, name: "Golden Raisins", description: "Sweet golden raisins from Ceylon grapes. Premium quality.", category: "fruitsNuts", image: "https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=400&h=400&fit=crop", popular: false, weights: [{ size: "250g", price: 4.99 }, { size: "500g", price: 8.99 }, { size: "1kg", price: 16.49 }] }
+        ];
+
+        const defaultReviews = [
+            { name: "Sarah M.", country: "London, UK", rating: 5, text: "The Ceylon cinnamon is absolutely incredible! Fast shipping to UK in just 4 days. Will definitely order again.", avatar: "SM" },
+            { name: "Michael Chen", country: "Toronto, Canada", rating: 5, text: "Authentic Sri Lankan flavors! The dried curry leaves are so fresh. Customs clearance was smooth.", avatar: "MC" },
+            { name: "Emma Wilson", country: "Sydney, Australia", rating: 5, text: "Best quality dry vegetables I've found online. The packaging is excellent for international shipping.", avatar: "EW" }
+        ];
+
+        const defaultFAQ = [
+            { q: "Do you ship to my country?", a: "We ship to 50+ countries worldwide including USA, UK, Canada, Australia, all EU countries, UAE, Singapore, Japan, and many more." },
+            { q: "How long does international shipping take?", a: "Express shipping (DHL/FedEx) takes 3-5 business days to major countries. Standard shipping takes 7-14 business days." },
+            { q: "Will I have to pay customs duties?", a: "Import duties and taxes may apply depending on your country's regulations. These are the customer's responsibility." },
+            { q: "What payment methods do you accept?", a: "We accept credit cards, PayPal, bank transfers (USD, EUR, GBP, AUD), and cryptocurrency (BTC, ETH, USDT)." },
+            { q: "How do I track my order?", a: "Once your order ships, you'll receive a tracking number via email to monitor your package's journey." },
+            { q: "Are your products organic?", a: "Yes! All our products are 100% organic with no preservatives or additives. We are ISO 22000 certified." }
+        ];
+
+        const defaultSettings = {
+            siteTitle: "CeylonNest | Premium Sri Lankan Dry Foods & Spices | International Shipping",
+            brandName: "CeylonNest",
+            tagline: "Premium Sri Lankan dry foods and spices for the global market.",
+            logo: "https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg",
+            favicon: "https://kimi-web-img.moonshot.cn/img/img.freepik.com/bc4db883c650b3ad84d62dd209786cd1d8838525.jpg",
+            email: "hello@ceylonnest.lk",
+            phone: "+94 75 244 8924",
+            address: "Colombo, Sri Lanka",
+            facebook: "https://web.facebook.com/profile.php?id=61588451505075",
+            instagram: "https://www.instagram.com/hello.ceylonnest/",
+            heroTitle: "Authentic Sri Lankan Spices & Dry Foods",
+            heroDescription: "Premium Ceylon cinnamon, curry leaves, gotukola, and traditional dry vegetables delivered to your kitchen worldwide. We ship to USA, UK, Europe, Australia, Asia & Middle East.",
+            heroImage: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=800&h=800&fit=crop",
+            heroBadge: "🌏 EXPORT QUALITY • CEYLON ORIGIN",
+            topBar: "🌍 We Ship Worldwide | ✈️ DHL & FedEx Express | 💳 Secure International Payments",
+            copyright: "© 2024 CeylonNest. Export License SL-2024-0892.",
+            aboutBadge: "Since 2018",
+            aboutTitle: "Exporting Ceylon's Finest to the World",
+            aboutText: "Based in Colombo, Sri Lanka, CeylonNest specializes in exporting premium dry foods that meet international standards. Our FDA-registered facility processes over 10 tons monthly for export to 50+ countries.",
+            contactTitle: "Contact Our Export Team",
+            contactText: "Have questions about shipping to your country? Our international team responds within 24 hours.",
+            spicesTitle: "Authentic Sri Lankan Spices",
+            spicesDescription: "Premium Ceylon cinnamon, curry leaves, and medicinal herbs. Sun-dried and packed for maximum potency.",
+            vegetablesTitle: "Dry Vegetables",
+            vegetablesDescription: "Essential ingredients for authentic Sri Lankan cooking. Rehydrates to 4x original weight.",
+            fruitsTitle: "Dried Fruits & Nuts",
+            fruitsDescription: "Naturally sweet tropical fruits and protein-rich nuts from Sri Lankan farms.",
+            bulkTitle: "Wholesale & Bulk Export",
+            bulkDescription: "Professional quantities for restaurants, retailers, and distributors. Custom packaging available."
+        };
+
+        // State
+        let products = JSON.parse(localStorage.getItem('ceylonnest_products')) || [...defaultProducts];
+        let reviews = JSON.parse(localStorage.getItem('ceylonnest_reviews')) || [...defaultReviews];
+        let faq = JSON.parse(localStorage.getItem('ceylonnest_faq')) || [...defaultFAQ];
+        let settings = JSON.parse(localStorage.getItem('ceylonnest_settings')) || {...defaultSettings};
+        let cart = JSON.parse(localStorage.getItem('ceylonnest_cart')) || [];
+        let orders = JSON.parse(localStorage.getItem('ceylonnest_orders')) || [];
+        let currentCurrency = 'USD';
+        let selectedShipping = null;
+        let selectedPayment = null;
+        let currentProductFilter = 'all';
+
+        const currencyRates = { USD: 1, EUR: 0.92, GBP: 0.79, AUD: 1.52, CAD: 1.36 };
+        const currencySymbols = { USD: '$', EUR: '€', GBP: '£', AUD: '$', CAD: '$' };
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            renderProducts();
+            renderFeaturedProducts();
+            renderReviews();
+            renderFAQ();
+            updateCartUI();
+            initAdminPanel();
+        });
+
+        // ==================== SETTINGS ====================
+        function loadSettings() {
+            document.getElementById('site-title').textContent = settings.siteTitle;
+            document.getElementById('header-brand-name').textContent = settings.brandName;
+            document.getElementById('mobile-brand-name').textContent = settings.brandName;
+            document.getElementById('footer-brand-name').textContent = settings.brandName;
+            document.getElementById('footer-tagline').textContent = settings.tagline;
+            document.getElementById('top-bar').textContent = settings.topBar;
+            document.getElementById('footer-copyright').textContent = settings.copyright;
+            
+            document.getElementById('header-logo').src = settings.logo;
+            document.getElementById('mobile-logo').src = settings.logo;
+            document.getElementById('footer-logo').src = settings.logo;
+            document.getElementById('hero-logo').src = settings.logo;
+            document.getElementById('site-favicon').href = settings.favicon;
+            
+            document.getElementById('hero-title').innerHTML = settings.heroTitle.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            document.getElementById('hero-description').textContent = settings.heroDescription;
+            document.getElementById('hero-image').src = settings.heroImage;
+            document.getElementById('hero-badge').textContent = settings.heroBadge;
+            
+            document.getElementById('about-badge').textContent = settings.aboutBadge;
+            document.getElementById('about-title').textContent = settings.aboutTitle;
+            document.getElementById('about-text').textContent = settings.aboutText;
+            
+            document.getElementById('contact-title').textContent = settings.contactTitle;
+            document.getElementById('contact-text').textContent = settings.contactText;
+            document.getElementById('contact-email').textContent = settings.email;
+            document.getElementById('contact-email').href = `mailto:${settings.email}`;
+            document.getElementById('contact-phone').textContent = settings.phone;
+            document.getElementById('contact-phone').href = `https://wa.me/${settings.phone.replace(/\D/g, '')}`;
+            document.getElementById('contact-facebook').href = settings.facebook;
+            document.getElementById('contact-instagram').href = settings.instagram;
+            
+            document.getElementById('footer-email').textContent = settings.email;
+            document.getElementById('footer-phone').textContent = settings.phone;
+            document.getElementById('footer-address').textContent = settings.address;
+            
+            document.getElementById('spices-title').textContent = settings.spicesTitle;
+            document.getElementById('spices-description').textContent = settings.spicesDescription;
+            document.getElementById('vegetables-title').textContent = settings.vegetablesTitle;
+            document.getElementById('vegetables-description').textContent = settings.vegetablesDescription;
+            document.getElementById('fruits-title').textContent = settings.fruitsTitle;
+            document.getElementById('fruits-description').textContent = settings.fruitsDescription;
+            document.getElementById('bulk-title').textContent = settings.bulkTitle;
+            document.getElementById('bulk-description').textContent = settings.bulkDescription;
+        }
+
+        function saveSettings() {
+            settings.siteTitle = document.getElementById('setting-site-title').value || defaultSettings.siteTitle;
+            settings.brandName = document.getElementById('setting-brand-name').value || defaultSettings.brandName;
+            settings.tagline = document.getElementById('setting-tagline').value || defaultSettings.tagline;
+            settings.logo = document.getElementById('setting-logo').value || defaultSettings.logo;
+            settings.favicon = document.getElementById('setting-favicon').value || defaultSettings.favicon;
+            settings.email = document.getElementById('setting-email').value || defaultSettings.email;
+            settings.phone = document.getElementById('setting-phone').value || defaultSettings.phone;
+            settings.address = document.getElementById('setting-address').value || defaultSettings.address;
+            settings.facebook = document.getElementById('setting-facebook').value || defaultSettings.facebook;
+            settings.instagram = document.getElementById('setting-instagram').value || defaultSettings.instagram;
+            settings.heroTitle = document.getElementById('setting-hero-title').value || defaultSettings.heroTitle;
+            settings.heroDescription = document.getElementById('setting-hero-description').value || defaultSettings.heroDescription;
+            settings.heroImage = document.getElementById('setting-hero-image').value || defaultSettings.heroImage;
+            settings.heroBadge = document.getElementById('setting-hero-badge').value || defaultSettings.heroBadge;
+            settings.topBar = document.getElementById('setting-top-bar').value || defaultSettings.topBar;
+            settings.copyright = document.getElementById('setting-copyright').value || defaultSettings.copyright;
+            settings.aboutBadge = document.getElementById('setting-about-badge').value || defaultSettings.aboutBadge;
+            settings.aboutTitle = document.getElementById('setting-about-title').value || defaultSettings.aboutTitle;
+            
+            localStorage.setItem('ceylonnest_settings', JSON.stringify(settings));
+            loadSettings();
+            alert('Settings saved successfully!');
+        }
+
+        function resetSettings() {
+            if (confirm('Reset all settings to default?')) {
+                settings = {...defaultSettings};
+                localStorage.setItem('ceylonnest_settings', JSON.stringify(settings));
+                initSettingsForm();
+                loadSettings();
+                alert('Settings reset to default!');
+            }
+        }
+
+        // ==================== PRODUCTS ====================
+        function renderProducts() {
+            const spicesContainer = document.getElementById('spices-grid');
+            const vegetablesContainer = document.getElementById('vegetables-grid');
+            const fruitsNutsContainer = document.getElementById('fruits-nuts-grid');
+            
+            spicesContainer.innerHTML = products.filter(p => p.category === 'spices').map(createProductCard).join('');
+            vegetablesContainer.innerHTML = products.filter(p => p.category === 'vegetables').map(createProductCard).join('');
+            fruitsNutsContainer.innerHTML = products.filter(p => p.category === 'fruitsNuts').map(createProductCard).join('');
+        }
+
+        function renderFeaturedProducts() {
+            const container = document.getElementById('featured-products');
+            const featured = products.filter(p => p.popular).slice(0, 4);
+            container.innerHTML = featured.map(createProductCard).join('');
+        }
+
+        function createProductCard(product) {
+            const defaultWeight = product.weights[0];
+            const weightOptions = product.weights.map((w, i) => 
+                `<button onclick="selectWeight(${product.id}, '${w.size}', ${w.price}, this)" class="weight-btn px-3 py-1.5 text-sm rounded-lg border-2 transition ${i === 0 ? 'border-brand-500 bg-brand-50 text-brand-700 font-medium' : 'border-warm-200 text-warm-600 hover:border-brand-300'}" data-size="${w.size}" data-price="${w.price}">${w.size}</button>`
+            ).join('');
+            
+            return `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group">
+                    <div class="relative overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                        ${product.popular ? '<span class="absolute top-3 left-3 bg-gold-500 text-warm-900 text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>' : ''}
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-warm-900 mb-2 line-clamp-1">${product.name}</h3>
+                        <p class="text-sm text-warm-500 mb-3 line-clamp-2">${product.description}</p>
+                        <div class="flex flex-wrap gap-2 mb-3" id="weight-options-${product.id}">${weightOptions}</div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-brand-600" id="price-${product.id}">${formatPrice(defaultWeight.price)}</span>
+                            <button onclick="addToCart(${product.id})" class="bg-brand-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-700 transition flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function selectWeight(productId, size, price, btn) {
+            const container = document.getElementById(`weight-options-${productId}`);
+            container.querySelectorAll('.weight-btn').forEach(b => {
+                b.classList.remove('border-brand-500', 'bg-brand-50', 'text-brand-700', 'font-medium');
+                b.classList.add('border-warm-200', 'text-warm-600');
+            });
+            btn.classList.remove('border-warm-200', 'text-warm-600');
+            btn.classList.add('border-brand-500', 'bg-brand-50', 'text-brand-700', 'font-medium');
+            document.getElementById(`price-${productId}`).textContent = formatPrice(price);
+            document.getElementById(`price-${productId}`).dataset.selectedSize = size;
+            document.getElementById(`price-${productId}`).dataset.selectedPrice = price;
+        }
+
+        function formatPrice(price) {
+            const converted = price * currencyRates[currentCurrency];
+            return `${currencySymbols[currentCurrency]}${converted.toFixed(2)}`;
+        }
+
+        function changeCurrency() {
+            currentCurrency = document.getElementById('currency-selector').value;
+            renderProducts();
+            renderFeaturedProducts();
+            updateCartUI();
+        }
+
+        // ==================== CART ====================
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const priceEl = document.getElementById(`price-${productId}`);
+            const selectedSize = priceEl.dataset.selectedSize || product.weights[0].size;
+            const selectedPrice = parseFloat(priceEl.dataset.selectedPrice) || product.weights[0].price;
+            
+            const cartItemId = `${productId}-${selectedSize}`;
+            const existingItem = cart.find(item => item.cartId === cartItemId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ 
+                    cartId: cartItemId, 
+                    id: productId, 
+                    quantity: 1, 
+                    price: selectedPrice, 
+                    name: product.name,
+                    size: selectedSize
+                });
+            }
+            
+            localStorage.setItem('ceylonnest_cart', JSON.stringify(cart));
+            updateCartUI();
+            toggleCart();
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            localStorage.setItem('ceylonnest_cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function updateCartQuantity(cartId, delta) {
+            const item = cart.find(item => item.cartId === cartId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(cartId);
+                    return;
+                }
+                localStorage.setItem('ceylonnest_cart', JSON.stringify(cart));
+                updateCartUI();
+            }
+        }
+
+        function clearCart() {
+            cart = [];
+            localStorage.setItem('ceylonnest_cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            const cartTotal = document.getElementById('cart-total');
+            const cartItemCount = document.getElementById('cart-item-count');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartCount.textContent = totalItems;
+            cartCount.classList.toggle('hidden', totalItems === 0);
+            cartItemCount.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
+            cartSubtotal.textContent = formatPrice(subtotal);
+            cartTotal.textContent = formatPrice(subtotal);
+            checkoutBtn.disabled = cart.length === 0;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-20 h-20 bg-warm-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        </div>
+                        <p class="text-warm-500">Your cart is empty</p>
+                        <a href="#spices" onclick="toggleCart()" class="inline-block mt-4 text-brand-600 font-medium hover:underline">Start Shopping</a>
+                    </div>
+                `;
+            } else {
+                cartItems.innerHTML = cart.map(item => {
+                    const bulkDetails = item.isBulk && item.bulkItems ? 
+                        `<ul class="text-xs text-warm-400 mt-1">${item.bulkItems.map(i => `<li>• ${i.name}</li>`).join('')}</ul>` : '';
+                    return `
+                    <div class="flex items-start space-x-4 bg-warm-50 p-4 rounded-xl">
+                        <div class="flex-1">
+                            <h4 class="font-medium text-warm-900">${item.name}</h4>
+                            <p class="text-sm text-warm-500">${item.size} - ${formatPrice(item.price)}</p>
+                            ${bulkDetails}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateCartQuantity('${item.cartId}', -1)" class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-warm-600 hover:bg-warm-200">-</button>
+                            <span class="w-8 text-center font-medium">${item.quantity}</span>
+                            <button onclick="updateCartQuantity('${item.cartId}', 1)" class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-warm-600 hover:bg-warm-200">+</button>
+                        </div>
+                        <button onclick="removeFromCart('${item.cartId}')" class="p-2 text-red-400 hover:text-red-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                `}).join('');
+            }
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+            setTimeout(() => overlay.classList.toggle('opacity-0'), 10);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        // ==================== CHECKOUT ====================
+        function openCheckout() {
+            if (cart.length === 0) return;
+            toggleCart();
+            document.getElementById('checkout-modal').classList.add('active');
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkout-subtotal').textContent = formatPrice(subtotal);
+            document.getElementById('checkout-total').textContent = formatPrice(subtotal);
+            document.getElementById('checkout-items').innerHTML = cart.map(item => {
+                const bulkInfo = item.isBulk ? ' (Bulk Pack)' : ` (${item.size})`;
+                return `<div class="flex justify-between"><span>${item.name}${bulkInfo} x${item.quantity}</span><span>${formatPrice(item.price * item.quantity)}</span></div>`;
+            }).join('');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').classList.remove('active');
+        }
+
+        function calculateInternationalShipping() {
+            const country = document.getElementById('shipping-country');
+            const zone = country.options[country.selectedIndex].dataset.zone;
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const weight = Math.ceil(cart.reduce((sum, item) => sum + (0.2 * item.quantity), 0));
+            
+            if (!zone) return;
+            
+            const baseRates = { 1: 25, 2: 35, 3: 45 };
+            const expressRate = baseRates[zone] + (weight * 3);
+            const standardRate = baseRates[zone] * 0.6 + (weight * 2);
+            
+            document.getElementById('express-price').textContent = formatPrice(expressRate);
+            document.getElementById('standard-price').textContent = formatPrice(standardRate);
+            document.getElementById('shipping-methods').classList.remove('hidden');
+        }
+
+        function selectShipping(method) {
+            selectedShipping = method;
+            document.querySelectorAll('.shipping-option').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`ship-${method}`).classList.add('selected');
+            
+            const country = document.getElementById('shipping-country');
+            const zone = country.options[country.selectedIndex].dataset.zone;
+            const weight = Math.ceil(cart.reduce((sum, item) => sum + (0.2 * item.quantity), 0));
+            const baseRates = { 1: 25, 2: 35, 3: 45 };
+            const shippingCost = method === 'express' ? baseRates[zone] + (weight * 3) : baseRates[zone] * 0.6 + (weight * 2);
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkout-shipping').textContent = formatPrice(shippingCost);
+            document.getElementById('checkout-total').textContent = formatPrice(subtotal + shippingCost);
+        }
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`pay-${method}`).classList.add('selected');
+        }
+
+        function placeOrder() {
+            const country = document.getElementById('shipping-country').value;
+            const fname = document.getElementById('checkout-fname').value;
+            const lname = document.getElementById('checkout-lname').value;
+            const email = document.getElementById('checkout-email').value;
+            const address1 = document.getElementById('checkout-address1').value;
+            const city = document.getElementById('checkout-city').value;
+            const zip = document.getElementById('checkout-zip').value;
+            const phone = document.getElementById('checkout-phone').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (!country || !fname || !lname || !email || !address1 || !city || !zip || !phone) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            if (!selectedShipping) {
+                alert('Please select a shipping method');
+                return;
+            }
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+            if (!terms) {
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shippingText = document.getElementById('checkout-shipping').textContent;
+            const shippingCost = parseFloat(shippingText.replace(/[^0-9.]/g, ''));
+            
+            const order = {
+                id: 'ORD-' + Date.now(),
+                customer: `${fname} ${lname}`,
+                email: email,
+                items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
+                subtotal: subtotal,
+                shipping: shippingCost,
+                total: subtotal + shippingCost,
+                shippingMethod: selectedShipping,
+                paymentMethod: selectedPayment,
+                status: 'Pending',
+                date: new Date().toISOString(),
+                address: { country, city, address1, zip, phone }
+            };
+            
+            orders.unshift(order);
+            localStorage.setItem('ceylonnest_orders', JSON.stringify(orders));
+            
+            cart = [];
+            localStorage.setItem('ceylonnest_cart', JSON.stringify(cart));
+            updateCartUI();
+            
+            alert(`Order placed successfully!\n\nOrder ID: ${order.id}\nTotal: ${formatPrice(order.total)}\n\nYou will receive a confirmation email shortly.`);
+            closeCheckout();
+            renderOrders();
+        }
+
+        // ==================== SHIPPING CALCULATOR ====================
+        function calculateEstimate() {
+            const country = document.getElementById('calc-country').value;
+            const weight = parseInt(document.getElementById('calc-weight').value);
+            
+            if (!country) {
+                document.getElementById('shipping-estimate').classList.add('hidden');
+                return;
+            }
+            
+            const zones = { US: 1, UK: 1, CA: 1, AU: 2, DE: 1, FR: 1, SG: 2, JP: 2, AE: 2 };
+            const zone = zones[country] || 1;
+            const baseRates = { 1: 25, 2: 35 };
+            
+            const express = baseRates[zone] + (weight * 3);
+            const standard = baseRates[zone] * 0.6 + (weight * 2);
+            
+            document.getElementById('express-estimate').textContent = formatPrice(express);
+            document.getElementById('standard-estimate').textContent = formatPrice(standard);
+            document.getElementById('shipping-estimate').classList.remove('hidden');
+        }
+
+        // ==================== BANKING ====================
+        const bankAccounts = {
+            usd: { currency: 'USD', swift: 'CCEYLKLX', account: '1001234567', iban: '', hasIban: false },
+            eur: { currency: 'EUR', swift: 'CCEYLKLX', account: '1001234568', iban: 'LK89CCEY1001234568', hasIban: true },
+            gbp: { currency: 'GBP', swift: 'CCEYLKLX', account: '1001234569', iban: 'LK89CCEY1001234569', hasIban: true },
+            aud: { currency: 'AUD', swift: 'CCEYLKLX', account: '1001234570', iban: '', hasIban: false }
+        };
+
+        function switchCurrency(currency) {
+            document.querySelectorAll('.currency-tab').forEach(tab => {
+                tab.classList.remove('bg-brand-600', 'text-white', 'shadow-lg');
+                tab.classList.add('bg-white', 'text-warm-600', 'border-2', 'border-warm-200');
+            });
+            document.getElementById(`tab-${currency}`).classList.remove('bg-white', 'text-warm-600', 'border-2', 'border-warm-200');
+            document.getElementById(`tab-${currency}`).classList.add('bg-brand-600', 'text-white', 'shadow-lg');
+            
+            const account = bankAccounts[currency];
+            document.getElementById('account-currency-label').textContent = `${account.currency} Account`;
+            document.getElementById('swift-code').textContent = account.swift;
+            document.getElementById('account-number').textContent = account.account;
+            
+            const ibanContainer = document.getElementById('iban-container');
+            if (account.hasIban) {
+                document.getElementById('iban-code').textContent = account.iban;
+                ibanContainer.classList.remove('hidden');
+            } else {
+                ibanContainer.classList.add('hidden');
+            }
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector(`button[onclick="copyToClipboard('${elementId}')"]`);
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
+            });
+        }
+
+        // ==================== REVIEWS & FAQ ====================
+        function renderReviews() {
+            const container = document.getElementById('reviews-grid');
+            container.innerHTML = reviews.map(r => `
+                <div class="bg-white p-6 rounded-2xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 font-bold">${r.avatar}</div>
+                        <div class="ml-3">
+                            <p class="font-bold text-warm-900">${r.name}</p>
+                            <p class="text-sm text-warm-500">${r.country}</p>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">${'★'.repeat(r.rating)}</div>
+                    <p class="text-warm-600">"${r.text}"</p>
+                </div>
+            `).join('');
+        }
+
+        function renderFAQ() {
+            const container = document.getElementById('faq-container');
+            container.innerHTML = faq.map((item, i) => `
+                <div class="border border-warm-200 rounded-xl overflow-hidden">
+                    <button onclick="toggleAccordion(${i})" class="w-full flex justify-between items-center p-4 bg-warm-50 hover:bg-warm-100 transition">
+                        <span class="font-medium text-warm-900 text-left">${item.q}</span>
+                        <svg id="faq-icon-${i}" class="w-5 h-5 text-warm-500 transform transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faq-content-${i}" class="accordion-content">
+                        <div class="p-4 text-warm-600">${item.a}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleAccordion(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            content.classList.toggle('active');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // ==================== ADMIN PANEL ====================
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.remove('active');
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (username === 'admin' && password === 'admin123') {
+                closeLoginModal();
+                openAdminPanel();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('main-website').style.display = 'none';
+            document.getElementById('admin-panel').classList.add('active');
+            initAdminPanel();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('active');
+            document.getElementById('main-website').style.display = 'block';
+        }
+
+        function logout() {
+            closeAdminPanel();
+        }
+
+        function showAdminTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active', 'text-white'));
+            document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.add('text-warm-300'));
+            
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            document.getElementById(`nav-${tab}`).classList.add('active', 'text-white');
+            document.getElementById(`nav-${tab}`).classList.remove('text-warm-300');
+            
+            if (tab === 'products') renderAdminProducts();
+            if (tab === 'orders') renderOrders();
+            if (tab === 'settings') initSettingsForm();
+            if (tab === 'content') initContentForm();
+        }
+
+        function initAdminPanel() {
+            document.getElementById('stat-products').textContent = products.length;
+            document.getElementById('stat-orders').textContent = orders.length;
+            const revenue = orders.reduce((sum, o) => sum + o.total, 0);
+            document.getElementById('stat-revenue').textContent = '$' + revenue.toFixed(0);
+            renderOrders();
+        }
+
+        function initSettingsForm() {
+            document.getElementById('setting-site-title').value = settings.siteTitle;
+            document.getElementById('setting-brand-name').value = settings.brandName;
+            document.getElementById('setting-tagline').value = settings.tagline;
+            document.getElementById('setting-logo').value = settings.logo;
+            document.getElementById('setting-favicon').value = settings.favicon;
+            document.getElementById('setting-email').value = settings.email;
+            document.getElementById('setting-phone').value = settings.phone;
+            document.getElementById('setting-address').value = settings.address;
+            document.getElementById('setting-facebook').value = settings.facebook;
+            document.getElementById('setting-instagram').value = settings.instagram;
+            document.getElementById('setting-hero-title').value = settings.heroTitle;
+            document.getElementById('setting-hero-description').value = settings.heroDescription;
+            document.getElementById('setting-hero-image').value = settings.heroImage;
+            document.getElementById('setting-hero-badge').value = settings.heroBadge;
+            document.getElementById('setting-top-bar').value = settings.topBar;
+            document.getElementById('setting-copyright').value = settings.copyright;
+            document.getElementById('setting-about-badge').value = settings.aboutBadge;
+            document.getElementById('setting-about-title').value = settings.aboutTitle;
+        }
+
+        function initContentForm() {
+            document.getElementById('content-spices-title').value = settings.spicesTitle;
+            document.getElementById('content-spices-description').value = settings.spicesDescription;
+            document.getElementById('content-vegetables-title').value = settings.vegetablesTitle;
+            document.getElementById('content-vegetables-description').value = settings.vegetablesDescription;
+            document.getElementById('content-fruits-title').value = settings.fruitsTitle;
+            document.getElementById('content-fruits-description').value = settings.fruitsDescription;
+            document.getElementById('content-bulk-title').value = settings.bulkTitle;
+            document.getElementById('content-bulk-description').value = settings.bulkDescription;
+            document.getElementById('content-about-text').value = settings.aboutText;
+            document.getElementById('content-contact-title').value = settings.contactTitle;
+            document.getElementById('content-contact-text').value = settings.contactText;
+        }
+
+        function saveContent() {
+            settings.spicesTitle = document.getElementById('content-spices-title').value;
+            settings.spicesDescription = document.getElementById('content-spices-description').value;
+            settings.vegetablesTitle = document.getElementById('content-vegetables-title').value;
+            settings.vegetablesDescription = document.getElementById('content-vegetables-description').value;
+            settings.fruitsTitle = document.getElementById('content-fruits-title').value;
+            settings.fruitsDescription = document.getElementById('content-fruits-description').value;
+            settings.bulkTitle = document.getElementById('content-bulk-title').value;
+            settings.bulkDescription = document.getElementById('content-bulk-description').value;
+            settings.aboutText = document.getElementById('content-about-text').value;
+            settings.contactTitle = document.getElementById('content-contact-title').value;
+            settings.contactText = document.getElementById('content-contact-text').value;
+            
+            localStorage.setItem('ceylonnest_settings', JSON.stringify(settings));
+            loadSettings();
+            alert('Content saved successfully!');
+        }
+
+        // ==================== PRODUCT MANAGEMENT ====================
+        function renderAdminProducts() {
+            const tbody = document.getElementById('admin-products-table');
+            const filtered = currentProductFilter === 'all' ? products : products.filter(p => p.category === currentProductFilter);
+            
+            tbody.innerHTML = filtered.map(p => {
+                const weightPrices = p.weights.map(w => `${w.size}: $${w.price.toFixed(2)}`).join(', ');
+                return `
+                <tr class="product-edit-row border-b border-warm-100">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <img src="${p.image}" alt="${p.name}" class="w-10 h-10 rounded-lg object-cover">
+                            <span class="font-medium text-warm-900">${p.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-warm-600 capitalize">${p.category}</td>
+                    <td class="px-6 py-4 text-sm">${weightPrices}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Active</span></td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="editProduct(${p.id})" class="text-blue-600 hover:text-blue-800 mr-3">Edit</button>
+                        <button onclick="deleteProduct(${p.id})" class="text-red-600 hover:text-red-800">Delete</button>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        function filterProducts(category) {
+            currentProductFilter = category;
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-warm-100', 'text-warm-600');
+            });
+            document.getElementById(`filter-${category}`).classList.remove('bg-warm-100', 'text-warm-600');
+            document.getElementById(`filter-${category}`).classList.add('bg-brand-600', 'text-white');
+            renderAdminProducts();
+        }
+
+        function openProductModal() {
+            document.getElementById('product-modal').classList.add('active');
+            document.getElementById('product-modal-title').textContent = 'Add Product';
+            document.getElementById('product-edit-id').value = '';
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-description').value = '';
+            document.getElementById('product-price-250').value = '';
+            document.getElementById('product-price-500').value = '';
+            document.getElementById('product-price-1000').value = '';
+            document.getElementById('product-category').value = 'spices';
+            document.getElementById('product-image').value = '';
+            document.getElementById('product-popular').checked = false;
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.remove('active');
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            document.getElementById('product-modal').classList.add('active');
+            document.getElementById('product-modal-title').textContent = 'Edit Product';
+            document.getElementById('product-edit-id').value = id;
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-description').value = product.description;
+            document.getElementById('product-category').value = product.category;
+            document.getElementById('product-image').value = product.image;
+            document.getElementById('product-popular').checked = product.popular;
+            
+            const w250 = product.weights.find(w => w.size === '250g');
+            const w500 = product.weights.find(w => w.size === '500g');
+            const w1000 = product.weights.find(w => w.size === '1kg');
+            document.getElementById('product-price-250').value = w250 ? w250.price : '';
+            document.getElementById('product-price-500').value = w500 ? w500.price : '';
+            document.getElementById('product-price-1000').value = w1000 ? w1000.price : '';
+        }
+
+        function handleProductSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('product-edit-id').value;
+            const weights = [
+                { size: '250g', price: parseFloat(document.getElementById('product-price-250').value) || 0 },
+                { size: '500g', price: parseFloat(document.getElementById('product-price-500').value) || 0 },
+                { size: '1kg', price: parseFloat(document.getElementById('product-price-1000').value) || 0 }
+            ];
+            const productData = {
+                name: document.getElementById('product-name').value,
+                description: document.getElementById('product-description').value,
+                weights: weights,
+                category: document.getElementById('product-category').value,
+                image: document.getElementById('product-image').value || 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&h=400&fit=crop',
+                popular: document.getElementById('product-popular').checked
+            };
+            
+            if (id) {
+                const index = products.findIndex(p => p.id === parseInt(id));
+                products[index] = { ...products[index], ...productData };
+            } else {
+                const newId = Math.max(...products.map(p => p.id), 0) + 1;
+                products.push({ id: newId, ...productData });
+            }
+            
+            localStorage.setItem('ceylonnest_products', JSON.stringify(products));
+            closeProductModal();
+            renderAdminProducts();
+            renderProducts();
+            renderFeaturedProducts();
+            document.getElementById('stat-products').textContent = products.length;
+            alert('Product saved successfully!');
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+            products = products.filter(p => p.id !== id);
+            localStorage.setItem('ceylonnest_products', JSON.stringify(products));
+            renderAdminProducts();
+            renderProducts();
+            renderFeaturedProducts();
+            document.getElementById('stat-products').textContent = products.length;
+        }
+
+        // ==================== ORDERS ====================
+        function renderOrders() {
+            const tbody = document.getElementById('orders-table');
+            const recentList = document.getElementById('recent-orders-list');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-warm-500">No orders yet</td></tr>';
+                recentList.innerHTML = '<p class="text-warm-500 text-center py-8">No recent orders</p>';
+                return;
+            }
+            
+            tbody.innerHTML = orders.map(o => `
+                <tr class="border-b border-warm-100">
+                    <td class="px-6 py-4 font-medium text-warm-900">${o.id}</td>
+                    <td class="px-6 py-4">${o.customer}</td>
+                    <td class="px-6 py-4">${o.items.length} items</td>
+                    <td class="px-6 py-4 font-medium">$${o.total.toFixed(2)}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">${o.status}</span></td>
+                    <td class="px-6 py-4 text-right text-warm-500">${new Date(o.date).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+            
+            recentList.innerHTML = orders.slice(0, 5).map(o => `
+                <div class="flex items-center justify-between p-3 bg-warm-50 rounded-lg">
+                    <div>
+                        <p class="font-medium text-warm-900">${o.id}</p>
+                        <p class="text-sm text-warm-500">${o.customer}</p>
+                    </div>
+                    <span class="font-medium text-brand-600">$${o.total.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+
+        // ==================== UTILITIES ====================
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function addBulkToCart(type) {
+            const bulkPacks = {
+                starter: {
+                    name: "5kg Restaurant Starter Pack",
+                    price: 185.00,
+                    items: [
+                        { name: "Dry Karapincha 1kg", qty: 1 },
+                        { name: "Ceylon Cinnamon 1kg", qty: 1 },
+                        { name: "Dried Mango 1kg", qty: 1 },
+                        { name: "Cashews 2kg", qty: 1 }
+                    ]
+                },
+                professional: {
+                    name: "20kg Professional Export Pack",
+                    price: 680.00,
+                    items: [
+                        { name: "Custom product mix", qty: 1 },
+                        { name: "Private label packaging", qty: 1 },
+                        { name: "Export documentation", qty: 1 },
+                        { name: "Free express shipping", qty: 1 }
+                    ]
+                },
+                enterprise: {
+                    name: "100kg Enterprise Container",
+                    price: 2900.00,
+                    items: [
+                        { name: "Full container load", qty: 1 },
+                        { name: "Sea freight included", qty: 1 },
+                        { name: "Customs clearance support", qty: 1 },
+                        { name: "Dedicated account manager", qty: 1 }
+                    ]
+                }
+            };
+            
+            const pack = bulkPacks[type];
+            if (!pack) return;
+            
+            const cartId = `bulk-${type}-${Date.now()}`;
+            cart.push({
+                cartId: cartId,
+                id: `bulk-${type}`,
+                quantity: 1,
+                price: pack.price,
+                name: pack.name,
+                size: "Bulk Pack",
+                isBulk: true,
+                bulkItems: pack.items
+            });
+            
+            localStorage.setItem('ceylonnest_cart', JSON.stringify(cart));
+            updateCartUI();
+            
+            alert(`${pack.name} added to cart!\n\nPrice: $${pack.price.toFixed(2)}\n\nOur team will contact you shortly to confirm your order.`);
+        }
+
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top');
+            if (window.scrollY > 500) btn.classList.add('visible');
+            else btn.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>
